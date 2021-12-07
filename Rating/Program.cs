@@ -10,6 +10,10 @@ namespace tryingToCopySir
         {
             try
             {
+                Console.WriteLine("Hello World!");
+                //var certificatePath = Directory.GetCurrentDirectory() + @"\certificate\foxai.info.pfx"; ;
+                //var certificatePassword = "pass123$";
+                //IPAddress ipAddress = IPAddress.Parse("*");
                 var host = new WebHostBuilder()
                     .UseKestrel()
                     .UseContentRoot(Directory.GetCurrentDirectory())
@@ -17,9 +21,13 @@ namespace tryingToCopySir
                     .UseStartup<Startup>()
                     .UseKestrel(options =>
                     {
-                        options.Listen(IPAddress.Parse("0.0.0.0"), 8080); // 172.0.0.1 IPAddress.Any
-
+                        options.Listen(IPAddress.Any, 5004);
+                        //options.Listen(IPAddress.Any, 443, listenOptions =>
+                        //{
+                        //    listenOptions.UseHttps(certificatePath, certificatePassword);
+                        //} );
                     })
+                    //  .UseUrls("https://*:5002")
                     .Build();
 
                 host.Run();

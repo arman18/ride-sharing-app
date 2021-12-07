@@ -10,15 +10,19 @@ namespace Communication.Controllers
 
         [HttpPost("api/match")]
         public  IActionResult sendMatch([FromBody] Match match)
-//        public  IActionResult sendMatch()
         {
-	     byte[] send_buffer = Encoding.ASCII.GetBytes(match.DriverName+","+match.RiderName);
-	    //Console.WriteLine("receiving api call------------!");
-	    //byte[] msg = Encoding.ASCII.GetBytes("match.DriverName"+","+"match.RiderName");  
-		    
-            Program.handler.Send(send_buffer);  
-            Console.WriteLine("buffer: "+send_buffer);
-            Console.WriteLine("match.DriverName: "+match.DriverName+","+" match.RiderName: "+match.RiderName);
+		    byte[] send_buffer = Encoding.ASCII.GetBytes(match.DriverName+","+match.RiderName);
+
+            try
+            {
+
+                Program.socket.SendTo(send_buffer, Program.sending_end_point);
+            }
+
+            catch (Exception send_exception)
+            {
+                Console.WriteLine(" Exception {0}", send_exception.Message);
+            }
 
             return Ok(match);
         }

@@ -63,8 +63,8 @@ namespace rideServer.Threads
                 drivers.Remove(tempDriver);
 
                 var client = new WebClient();
-                client.Headers[HttpRequestHeader.ContentType] = "application/json"; //http://127.0.0.1:5002/api/match
-                client.UploadString("http://communication-dhaka:8080/api/match", "{\"DriverName\":\""+tempDriver.Name+"\",\"DriverLocation\":\""+ tempDriver.Position + "\",\"RiderName\":\""+ rider.Name + "\",\"RiderLocation\":\""+ rider.Position + "\"}");
+                client.Headers[HttpRequestHeader.ContentType] = "application/json";
+                client.UploadString("http://127.0.0.1:5002/api/match", "{\"DriverName\":\""+tempDriver.Name+"\",\"DriverLocation\":\""+ tempDriver.Position + "\",\"RiderName\":\""+ rider.Name + "\",\"RiderLocation\":\""+ rider.Position + "\"}");
 
             }
             for (int i = 0; i < tempRiders.Count; i++)

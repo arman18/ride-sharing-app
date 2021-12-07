@@ -9,62 +9,38 @@ using System.Threading.Tasks;
 
 public class UDPListener
 {
-    private const int listenPort = 1100;
-    public static IPAddress ipAddress;
-    public static    	IPEndPoint remoteEP;
-    public static    	Socket sender;
-public static    byte[] bytes = new byte[1024]; 
-        public static async void post(string received_data){
-    		await Task.Run(() =>{
-    			string[] sp = received_data.Split(',');
-			var client = new WebClient();
-			int rating = 5;
-			client.Headers[HttpRequestHeader.ContentType] = "application/json";
-			string str = "{\"Driver\":"+ "\""+sp[0]+"\",\"Rider\":"+ "\""+sp[1]+"\",\"Rating\":"+ rating+"}";
-			client.UploadString("http://dhaka.server.com/api/rating", str);
-    		});
-        }
+    private const int listenPort = 11000;
+
     public static async void wait()
     {
-      	ipAddress = IPAddress.Parse("0.0.0.0");  
-        remoteEP = new IPEndPoint(ipAddress, 1102);
-        sender = new Socket(ipAddress.AddressFamily,SocketType.Stream, ProtocolType.Tcp);
-        sender.Connect(remoteEP);  
-  
-        Console.WriteLine("Socket connected to {0}",sender.RemoteEndPoint.ToString());
+        UdpClient listener = new UdpClient(listenPort);
+        IPAddress send_to_address = IPAddress.Parse("0.0.0.0");
+        IPEndPoint groupEP = new IPEndPoint(send_to_address, listenPort);
+        string received_data;
+        byte[] receive_byte_array;
+        await Task.Run(() =>
+        {
+            while (true)
+            {
+                receive_byte_array = listener.Receive(ref groupEP);
+                received_data = Encoding.ASCII.GetString(receive_byte_array, 0, receive_byte_array.Length);
+                Console.WriteLine("pair: {0}\n", received_data);
+                int rating = 5;
+//		string[] sp = new string[2];sp[0] = "arman";sp[1] = "hossain2";
+		string[] sp = received_data.Split(',');
+		var client = new WebClient();
+		client.Headers[HttpRequestHeader.ContentType] = "application/json";
+		string str = "{\"Driver\":"+ "\""+sp[0]+"\",\"Rider\":"+ "\""+sp[1]+"\",\"Rating\":"+ rating+"}";
+//		client.UploadString("http://127.0.0.1:7000/api/rating", str);
+		client.UploadString("http://localhost:5004/api/rating", str);
 
-      	try {  
-		await Task.Run(() =>{
-		    while (true)
-		    {
-		        int bytesRec = sender.Receive(bytes);  
-		        string received_data = Encoding.ASCII.GetString(bytes, 0, bytesRec);
-		        if(received_data=="") continue;
-		        Console.WriteLine("received = {0}", received_data ); 
-		        post(received_data);
-		    }
-		});   
-	//        sender.Shutdown(SocketShutdown.Both);  
-	//        sender.Close();  
-  
-            }  
-            catch (ArgumentNullException ane)  
-            {  
-                Console.WriteLine("ArgumentNullException : {0}", ane.ToString());  
-            }  
-            catch (SocketException se)  
-            {  
-                Console.WriteLine("SocketException : {0}", se.ToString());  
-            }  
-            catch (Exception e)  
-            {  
-                Console.WriteLine("Unexpected exception : {0}", e.ToString());  
+                
             }
-
+        });
     }
     public static int Main()
     {
-
+        ///*
         wait();
         string[] driver = new string[10];
         driver[0] = "{\"name\": \"driver1\",\"carName\": \"C1\",\"position\": \"0,0\"}";
@@ -89,18 +65,25 @@ public static    byte[] bytes = new byte[1024];
         rider[8] = "{\"name\": \"rider9\",\"position\": \"30,20\",\"destination\": \"65,32\"}";
         rider[9] = "{\"name\": \"rider10\",\"position\": \"15,10\",\"destination\": \"23,23\"}";
         var client = new WebClient();
-        
+        client.Headers[HttpRequestHeader.ContentType] = "application/json";
         for(int i = 0; i < 10; i++)
         {
-            Uri u1 = new Uri("http://dhaka.server.com/api/driver");
-            Uri u2 = new Uri("http://dhaka.server.com/api/rider");
+            /*
+            client.Headers[HttpRequestHeader.ContentType] = "application/json";
+            client.UploadString("http://127.0.0.1:7000/api/driver", driver[i]);
+            client.Headers[HttpRequestHeader.ContentType] = "application/json";
+            client.UploadString("http://127.0.0.1:7000/api/rider", rider[i]);
+            */
+            Uri u1 = new Uri("http://localhost:5003/api/driver");
+            Uri u2 = new Uri("http://localhost:5003/api/rider");
             client.Headers[HttpRequestHeader.ContentType] = "application/json";
             client.UploadString(u1, driver[i]);
             client.Headers[HttpRequestHeader.ContentType] = "application/json";
             client.UploadString(u2, rider[i]);
             
         }
-	while(true){}
+
+        while (true) { }
         return 0;
     }
 }

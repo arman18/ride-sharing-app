@@ -14,7 +14,7 @@ namespace ServerApp.Controllers
         [HttpPost("api/rating")]
         public IActionResult AddRating([FromBody] DriverRider driverRider)
         {
-
+        Console.WriteLine("Hello World!");
             _driverRiderRepository.Add(driverRider);
             return Ok(driverRider);
         }

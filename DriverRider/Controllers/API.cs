@@ -19,14 +19,12 @@ namespace rideServer.Controllers
         public  IActionResult PostRiderLocation([FromBody] Rider rider)
         {
             TServer.AddRider(rider);
-
             return Ok(rider);
         }
 
         [HttpPost("api/driver")]
         public IActionResult postDriverLocation([FromBody] Driver driver)
         {
-            Console.WriteLine("working");
             TServer.AddDriver(driver);
             return Ok(driver);
         }

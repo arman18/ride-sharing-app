@@ -31,9 +31,13 @@ namespace rideServer
                     .UseStartup<Startup>()
                     .UseKestrel(options =>
                     {
-                        options.Listen(IPAddress.Parse("0.0.0.0"), 8080);
+                        options.Listen(IPAddress.Any, 5003);
                         //options.Listen(IPAddress.Any, 443, listenOptions =>
+                        //{
+                        //    listenOptions.UseHttps(certificatePath, certificatePassword);
+                        //} );
                     })
+                    //  .UseUrls("https://*:5002")
                     .Build();
 
                 host.Run();

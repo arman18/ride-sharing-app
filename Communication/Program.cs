@@ -3,51 +3,21 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using Microsoft.AspNetCore.Hosting;
-using System.Text;
-using System.Threading.Tasks;
+
+
 namespace Communication
 {
-
-
     class Program
     {
-    
-        public static async void wait(){
-        await Task.Run(() =>{
-        Console.WriteLine("Waiting for a connection...");  
-      	handler = listener.Accept();
-            
-        });
-    	              
-    }
+        public static Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
 
-	public static Socket listener;
-	public static Socket handler;
+        public static IPAddress send_to_address = IPAddress.Parse("0.0.0.0");
+
+        public static IPEndPoint sending_end_point = new IPEndPoint(send_to_address, 11000);
         [Obsolete]
         static void Main(string[] args)
         {
             
-            IPAddress ipAddress = IPAddress.Parse("0.0.0.0");  
-        	IPEndPoint localEndPoint = new IPEndPoint(ipAddress, 1100);
-            
-            try {   
-     
-            listener = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);  
-    
-            listener.Bind(localEndPoint);  
-
-
-            listener.Listen(10);  
-  	    wait();
-  
-            
-            //handler.Shutdown(SocketShutdown.Both);  
-            //handler.Close();  
-        }  
-        catch (Exception e)  
-        {  
-            Console.WriteLine("arman"+e.ToString());  
-        }
 
             try
             {
@@ -62,10 +32,13 @@ namespace Communication
                     .UseStartup<Startup>()
                     .UseKestrel(options =>
                     {
-                        options.Listen(IPAddress.Parse("0.0.0.0"), 8080);
-                        
+                        options.Listen(IPAddress.Parse("0.0.0.0"), 5002);
+                        //options.Listen(IPAddress.Any, 443, listenOptions =>
+                        //{
+                        //    listenOptions.UseHttps(certificatePath, certificatePassword);
+                        //} );
                     })
-                    
+                    //  .UseUrls("https://*:5002")
                     .Build();
 
                 host.Run();
