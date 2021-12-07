@@ -1,0 +1,12 @@
+enter ubuntu first
+1. search dotnet
+2. click download
+3. install dotnet core
+4. manual install by snap package
+	below that page we have which operating system support what we can check that to get sure your ubuntu will support your desired version of dotnet or not
+5. as we are developer goto SDK section and paste that first command to your terminal 
+
+----- dotnet --version: to see correctly installed
+----- dotnet new console: to create a new console application
+----- dotnet run: to see the result
+

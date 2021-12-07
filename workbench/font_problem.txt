@@ -1,0 +1,7 @@
+-------------execute following commands---------------
+rm -rf ~/.cache/fontconfig 
+sudo fc-cache -r -v
+find ~/snap/mysql-workbench-community/ -name 'fontconfig'
+rm -rf ~/snap/mysql-workbench-community/common/.cache/fontconfig/
+
+------restart your ubuntu-------------

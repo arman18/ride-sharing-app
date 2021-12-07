@@ -1,0 +1,52 @@
+------------------ isntall ef by-----------------
+dotnet tool install --global dotnet-ef
+then restart 
+-------------------- error ---------------------------
+
+run: dotnet ef
+error: Process terminated. Couldn't find a valid ICU package installed on the system. Set the configuration flag System.Globalization.Invariant to true if you want to run with no globalization support.
+
+run: export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
+
+------------------------ simple schema---------------------------
+
+show databases;
+CREATE SCHEMA IF NOT EXISTS hello DEFAULT CHARACTER SET utf8;
+USE hello;
+
+	CREATE TABLE if not exists hello.products (
+	    id int(10) NOT NULL AUTO_INCREMENT,
+		name varchar(250) NOT NULL,
+		code varchar(250) NOT NULL,
+		price double(9,2) NOT NULL,
+		image varchar(250) NOT NULL,
+		PRIMARY KEY (id),
+		UNIQUE KEY code (code)
+		);
+	show tables;
+	select * from hello.products;
+	
+insert into hello.products values(
+1,
+'arman',
+'103',
+101,
+'ok'
+);
+	# drop database hello;
+------------ project -----------------
+1. dotnet new web
+2.
+dotnet add package Microsoft.EntityFrameworkCore
+dotnet add package MySql.Data.EntityFrameworkCore
+dotnet add package Microsoft.EntityFrameworkCore.Tools
+dotnet restore
+create Models Folder
+dotnet ef dbcontext scaffold "Server=127.0.0.1;Port=3306;Database=hello;Uid=root;Pwd=root;" MySql.Data.EntityFrameworkCore -o Models
+/*
+PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.7" />
+   dotnet add package
+		
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.7" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.7">
+*/

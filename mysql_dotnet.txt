@@ -1,0 +1,39 @@
+	
+1. run rating on local 
+    options.Listen(IPAddress.Parse("0.0.0.0"), 8080);
+	private const string ConnectionString = "Server=172.17.0.1;Port=33061;Database=rating;Uid=root;Pwd=root;";
+2. run mysql on yml
+	mysql:
+     image: mysql:latest
+     ports:
+       - 33061:3306
+     environment:
+       - MYSQL_ROOT_PASSWORD=root
+3. dotnet ef migrations add init // see command help hy dotnet ef migrations --help
+4. dotnet ef database update
+5. run rating by yml using same connection string
+
+test by post man:
+post: http://0.0.0.0:8800/api/rating
+{
+    "Driver":"arman",
+    "Rider":"hossain",
+    "Rating":5
+}
+
+---------------- or use this sql command -----------------------
+
+show databases;
+create database rating;
+# drop database rating;
+use rating;
+show tables from rating;
+# drop table rating.driverRiders;
+select * from rating.driverRiders;
+CREATE TABLE `driverRiders` (
+  `Id` int NOT NULL AUTO_INCREMENT,
+  `Driver` text,
+  `Rider` text,
+  `Rating` int NOT NULL,
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB AUTO_INCREMENT=153 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

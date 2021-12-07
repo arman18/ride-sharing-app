@@ -1,0 +1,41 @@
+sudo apt install docker.io
+sudo docker pull mcr.microsoft.com/dotnet/aspnet:3.1
+sudo docker image ls
+
+----------------------------build run and delete-------------------------------------
+
+1. install extension: Docker by * (which has * symbol among those extensions)
+
+2. create new project
+	do in terminal:
+--dotnet new console
+3. create Dockerfile
+in command pallete: docker add file to work place
+
+4. build image
+--in command pallate: docker image build image: dotnet build /home/arman/Desktop/step-3.1/step-3.1.csproj /property:GenerateFullPaths=true /consoleloggerparameters:NoSummary 
+	error: connection refused
+	sol: sudo chmod 666 /var/run/docker.sock
+	
+or in terminal: sudo docker build -t newImageName .
+
+5. run docker file:
+
+in terminal: 
+--docker image run: sudo docker run --rm -d  step31:latest 
+
+6. remove image 
+in terminal:
+-- sudo docker image rm nameOrId -f
+
+
+
+----------to se running image so called container -------------
+docker ps
+docker container ls
+docker ps -a
+
+---------------- to enter a container(running) not image!!------------------
+--docker exec -it <container name> /bin/bash : to enter bash
+--docker exec -it <container name> <command> : to run a command
+----------------
