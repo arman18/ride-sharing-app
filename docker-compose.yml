@@ -1,54 +1,22 @@
 version: '3'
 
-networks:
-    bdnet:
-        ipam:
-            config:
-                - subnet: 10.100.0.0/24
 services:
-    communication-dhaka:
+    communication:
         build: ./Communication/
         #image: name/tag
         ports:
-            - 1102:1100
+            - 1100:1100
         restart: always
-        networks:
-            bdnet:
-                ipv4_address: 10.100.0.2
-    communication-chatt:
-        build: ./Communication/
-        #image: name/tag
-        ports:
-            - 11001:1100
-        restart: always
-        networks:
-            bdnet:
-                ipv4_address: 10.100.0.3
-    driverrider-dhaka:
+    driverrider:
         build: ./DriverRider/
         #image: name/tag
         restart: always
         depends_on:
-            - communication-dhaka
-        networks:
-            bdnet:
-                ipv4_address: 10.100.0.4
-    driverrider-chatt:
-        build: ./DriverRider/
-        #image: name/tag
-        restart: always
-        depends_on:
-            - communication-chatt
-        networks:
-            bdnet:
-                ipv4_address: 10.100.0.5
+            - communication
     rating:
         build: ./Rating/
         #image: name/tag
         restart: always
-        networks:
-            bdnet:
-                ipv4_address: 10.100.0.6
     database:
         image: mysql:latest
         ports:
@@ -58,36 +26,11 @@ services:
         environment:
             MYSQL_ROOT_USER: root
             MYSQL_ROOT_PASSWORD: root
-        networks:
-            bdnet:
-                ipv4_address: 10.100.0.7
-    nginx-dhaka:
+    nginx:
         build: ./nginx/
-#        ports:
-#            - 8080:80
-        environment:
-            - COMM=communication-dhaka
-            - DRIVRID=driverrider-dhaka
+        ports:
+            - 8080:80
         depends_on:
             - rating
-            - communication-dhaka
-            - driverrider-dhaka
-        command: /bin/sh -c "envsubst < /etc/nginx/conf.d/nginx.conf.template > /etc/nginx/conf.d/nginx.conf && nginx -g 'daemon off;'"
-        networks:
-            bdnet:
-                ipv4_address: 10.100.0.8
-    nginx-chatt:
-        build: ./nginx/
-#        ports:
-#            - 8080:80
-        environment:
-            - COMM=communication-chatt
-            - DRIVRID=driverrider-chatt
-        depends_on:
-            - rating
-            - communication-chatt
-            - driverrider-chatt
-        command: /bin/sh -c "envsubst < /etc/nginx/conf.d/nginx.conf.template > /etc/nginx/conf.d/nginx.conf && nginx -g 'daemon off;'"
-        networks:
-            bdnet:
-                ipv4_address: 10.100.0.9
+            - communication
+            - driverrider

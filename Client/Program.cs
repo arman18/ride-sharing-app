@@ -21,13 +21,13 @@ public static    byte[] bytes = new byte[1024];
 			int rating = 5;
 			client.Headers[HttpRequestHeader.ContentType] = "application/json";
 			string str = "{\"Driver\":"+ "\""+sp[0]+"\",\"Rider\":"+ "\""+sp[1]+"\",\"Rating\":"+ rating+"}";
-			client.UploadString("http://dhaka.server.com/api/rating", str);
+			client.UploadString("http://localhost:8080/api/rating", str);
     		});
         }
     public static async void wait()
     {
       	ipAddress = IPAddress.Parse("0.0.0.0");  
-        remoteEP = new IPEndPoint(ipAddress, 1102);
+        remoteEP = new IPEndPoint(ipAddress, 1100);
         sender = new Socket(ipAddress.AddressFamily,SocketType.Stream, ProtocolType.Tcp);
         sender.Connect(remoteEP);  
   
@@ -92,8 +92,8 @@ public static    byte[] bytes = new byte[1024];
         
         for(int i = 0; i < 10; i++)
         {
-            Uri u1 = new Uri("http://dhaka.server.com/api/driver");
-            Uri u2 = new Uri("http://dhaka.server.com/api/rider");
+            Uri u1 = new Uri("http://localhost:8080/api/driver");
+            Uri u2 = new Uri("http://localhost:8080/api/rider");
             client.Headers[HttpRequestHeader.ContentType] = "application/json";
             client.UploadString(u1, driver[i]);
             client.Headers[HttpRequestHeader.ContentType] = "application/json";
