@@ -1,0 +1,2 @@
+ sudo docker build -t webserver .
+ sudo docker run -it --rm -d -p 8080:7000 --name web webserver
